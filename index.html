@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>کارگاه شیرینی پزی آدرینا - سامانه سفارش آنلاین</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+        }
+        
+        .cake-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .sparkle {
+            animation: sparkle 2s linear infinite;
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #e0f2fe 0%, #b3e5fc 50%, #81d4fa 100%);
+        }
+        
+        .fantasy-gradient {
+            background: linear-gradient(135deg, #1a237e 0%, #3949ab 50%, #5c6bc0 100%);
+        }
+        
+        .magic-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(227,242,253,0.9) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .floating-element {
+            animation: magicFloat 4s ease-in-out infinite;
+        }
+        
+        @keyframes magicFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-15px) rotate(2deg); }
+            50% { transform: translateY(-10px) rotate(-1deg); }
+            75% { transform: translateY(-20px) rotate(1deg); }
+        }
+        
+        .magic-sparkle {
+            animation: magicSparkle 3s linear infinite;
+        }
+        
+        @keyframes magicSparkle {
+            0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
+            25% { opacity: 0.7; transform: scale(1.3) rotate(90deg); }
+            50% { opacity: 0.4; transform: scale(0.8) rotate(180deg); }
+            75% { opacity: 0.8; transform: scale(1.1) rotate(270deg); }
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .trust-badge {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+    <!-- Header -->
+    <header class="fantasy-gradient shadow-2xl sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4 space-x-reverse">
+                    <div class="text-4xl floating-element">🎂</div>
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-bold text-white drop-shadow-lg">کارگاه شیرینی پزی آدرینا</h1>
+                        <p class="text-blue-100 text-sm">سامانه سفارش آنلاین</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4 space-x-reverse">
+                    <button onclick="openModal('loginModal')" class="bg-white hover:bg-blue-50 text-blue-800 px-4 py-2 rounded-lg font-medium transition-all shadow-lg hover:shadow-xl">
+                        ورود / ثبت نام
+                    </button>
+                    <button onclick="openModal('orderTrackModal')" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-all shadow-lg hover:shadow-xl">
+                        پیگیری سفارش
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Trust Badges Section -->
+    <section class="bg-white py-4 border-b">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-center items-center space-x-8 space-x-reverse flex-wrap">
+                <div class="trust-badge flex items-center space-x-2 space-x-reverse">
+                    <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                        <span class="text-white text-sm">✓</span>
+                    </div>
+                    <span class="text-sm text-gray-700">نماد اعتماد الکترونیکی</span>
+                </div>
+                <div class="trust-badge flex items-center space-x-2 space-x-reverse">
+                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                        <span class="text-white text-sm">🛡️</span>
+                    </div>
+                    <span class="text-sm text-gray-700">پرداخت امن</span>
+                </div>
+                <div class="trust-badge flex items-center space-x-2 space-x-reverse">
+                    <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
+                        <span class="text-white text-sm">📱</span>
+                    </div>
+                    <span class="text-sm text-gray-700">اپلیکیشن موبایل</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hero Section -->
+    <section class="py-16 relative overflow-hidden">
+        <div class="absolute inset-0">
+            <div class="magic-sparkle absolute top-10 left-10 text-4xl">⭐</div>
+            <div class="magic-sparkle absolute top-20 right-20 text-3xl">✨</div>
+            <div class="magic-sparkle absolute bottom-20 left-20 text-5xl">🌟</div>
+            <div class="magic-sparkle absolute bottom-10 right-10 text-3xl">💫</div>
+        </div>
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <h2 class="text-4xl md:text-5xl font-bold text-blue-900 mb-6 drop-shadow-lg">
+                سفارش آنلاین کیک و شیرینی
+                <span class="magic-sparkle text-6xl">✨</span>
+            </h2>
+            <p class="text-xl text-blue-800 mb-8 drop-shadow-md">
+                با اپلیکیشن موبایل ما، سفارش دهید و زمان تحویل را پیگیری کنید
+            </p>
+            <div class="flex justify-center space-x-4 space-x-reverse mb-8">
+                <button onclick="checkLoginAndOrder()" class="bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white px-8 py-4 rounded-full font-bold text-lg transition-all transform hover:scale-105 shadow-2xl">
+                    سفارش آنلاین 🛒
+                </button>
+                <button onclick="downloadApp()" class="bg-gradient-to-r from-white to-blue-50 hover:from-blue-50 hover:to-blue-100 text-blue-800 px-8 py-4 rounded-full font-bold text-lg transition-all transform hover:scale-105 shadow-2xl border border-blue-200">
+                    دانلود اپلیکیشن 📱
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center mb-12">
+                <h3 class="text-4xl font-bold text-pink-800">
+                    محصولات ما
+                    <span class="sparkle">⭐</span>
+                </h3>
+                <button onclick="openModal('adminModal')" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm">
+                    پنل مدیریت
+                </button>
+            </div>
+            
+            <div id="productsGrid" class="grid md:grid-cols-3 gap-8">
+                <!-- Products will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section class="py-16 bg-gradient-to-r from-pink-100 to-purple-100">
+        <div class="container mx-auto px-4">
+            <h3 class="text-4xl font-bold text-center text-pink-800 mb-12">
+                نظرات مشتریان
+                <span class="sparkle">💬</span>
+            </h3>
+            <div id="reviewsContainer" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Reviews will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact & Location Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h3 class="text-4xl font-bold text-center text-pink-800 mb-12">
+                آدرس و تماس
+                <span class="sparkle">📍</span>
+            </h3>
+            
+            <div class="max-w-2xl mx-auto">
+                <!-- Address Info -->
+                <div class="bg-gradient-to-br from-pink-50 to-purple-50 rounded-2xl p-8 text-center">
+                    <h4 class="text-2xl font-bold text-pink-800 mb-6">آدرس کارگاه</h4>
+                    <div class="space-y-4">
+                        <div class="flex items-start justify-center space-x-3 space-x-reverse">
+                            <span class="text-2xl mt-1">📍</span>
+                            <div>
+                                <p class="text-gray-700 font-medium">کارگاه شیرینی پزی آدرینا</p>
+                                <p class="text-gray-600">بلوار توس، توس ۴۱</p>
+                                <p class="text-gray-600">۵ کیلومتر بعد از شهرک حجت</p>
+                                <p class="text-gray-600">روستای نوری، کوچه نیلوفر</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-center space-x-3 space-x-reverse">
+                            <span class="text-2xl">📱</span>
+                            <span class="text-gray-700">۰۹۱۵۴۰۳۲۸۰۸</span>
+                        </div>
+                        <div class="flex items-center justify-center space-x-3 space-x-reverse">
+                            <span class="text-2xl">🕐</span>
+                            <span class="text-gray-700">روزانه ۸ صبح تا ۱۰ شب</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login/Register Modal -->
+    <div id="loginModal" class="modal">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
+            <div class="text-center mb-6">
+                <h3 class="text-2xl font-bold text-pink-800">ورود / ثبت نام</h3>
+                <div class="text-4xl mt-2">🔐</div>
+            </div>
+            
+            <div class="mb-4">
+                <button onclick="switchTab('login')" id="loginTab" class="w-1/2 py-2 bg-pink-500 text-white rounded-r-lg">ورود</button>
+                <button onclick="switchTab('register')" id="registerTab" class="w-1/2 py-2 bg-gray-300 text-gray-700 rounded-l-lg">ثبت نام</button>
+            </div>
+            
+            <form id="authForm">
+                <div id="loginForm">
+                    <input type="tel" placeholder="شماره موبایل" class="w-full p-3 mb-4 border rounded-lg" required>
+                    <input type="password" placeholder="رمز عبور" class="w-full p-3 mb-4 border rounded-lg" required>
+                </div>
+                
+                <div id="registerForm" style="display: none;">
+                    <input type="text" placeholder="نام و نام خانوادگی" class="w-full p-3 mb-4 border rounded-lg" required>
+                    <input type="tel" placeholder="شماره موبایل" class="w-full p-3 mb-4 border rounded-lg" required>
+                    <input type="password" placeholder="رمز عبور" class="w-full p-3 mb-4 border rounded-lg" required>
+                    <input type="password" placeholder="تکرار رمز عبور" class="w-full p-3 mb-4 border rounded-lg" required>
+                </div>
+                
+                <button type="submit" class="w-full bg-pink-500 hover:bg-pink-600 text-white py-3 rounded-lg font-bold">
+                    ورود
+                </button>
+            </form>
+            
+            <button onclick="closeModal('loginModal')" class="absolute top-4 left-4 text-gray-500 hover:text-gray-700 text-2xl">×</button>
+        </div>
+    </div>
+
+    <!-- Order Modal -->
+    <div id="orderModal" class="modal">
+        <div class="bg-white rounded-2xl p-8 max-w-2xl w-full mx-4 max-h-96 overflow-y-auto">
+            <h3 class="text-2xl font-bold text-pink-800 mb-6 text-center">سفارش جدید</h3>
+            
+            <form id="newOrderForm">
+                <div class="grid md:grid-cols-2 gap-4 mb-4">
+                    <select id="productSelect" class="p-3 border rounded-lg" required onchange="updateProductDetails()">
+                        <option value="">انتخاب محصول</option>
+                        <option value="1">کیک تولد فانتزی</option>
+                        <option value="2">شیرینی تَر (سولی، تَر، رولت)</option>
+                        <option value="3">شیرینی خشک (زبون، دانمارکی)</option>
+                    </select>
+                    
+                    <!-- Order Type Selection -->
+                    <div id="orderTypeSection" class="hidden">
+                        <label class="block text-gray-700 mb-2">نوع سفارش:</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="flex items-center p-2 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="radio" name="orderType" value="weight" class="ml-2" onchange="toggleOrderType()">
+                                <span>به کیلوگرم</span>
+                            </label>
+                            <label class="flex items-center p-2 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="radio" name="orderType" value="quantity" class="ml-2" onchange="toggleOrderType()">
+                                <span>به تعداد</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Weight Input -->
+                <div id="weightSection" class="mb-4">
+                    <div class="flex">
+                        <input type="number" id="weightInput" placeholder="وزن" min="0.5" step="0.5" class="p-3 border rounded-r-lg flex-1" onchange="calculatePrice()">
+                        <span class="bg-gray-100 px-3 py-3 border-t border-b border-l rounded-l-lg text-gray-600">کیلوگرم</span>
+                    </div>
+                </div>
+
+                <!-- Quantity Input -->
+                <div id="quantitySection" class="mb-4 hidden">
+                    <div class="flex">
+                        <input type="number" id="quantityInput" placeholder="تعداد" min="1" class="p-3 border rounded-r-lg flex-1" onchange="calculatePrice()">
+                        <span class="bg-gray-100 px-3 py-3 border-t border-b border-l rounded-l-lg text-gray-600">عدد</span>
+                    </div>
+                </div>
+
+                <div id="productVariants" class="mb-4 hidden">
+                    <label class="block text-gray-700 mb-2">نوع محصول:</label>
+                    <select id="variantSelect" class="w-full p-3 border rounded-lg">
+                        <!-- Options will be populated based on product selection -->
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">آپلود عکس مورد نظر (اختیاری):</label>
+                    <input type="file" accept="image/*" class="w-full p-3 border rounded-lg" id="imageUpload">
+                    <p class="text-sm text-gray-500 mt-1">برای کیک: عکس طراحی مورد نظر خود را آپلود کنید</p>
+                </div>
+
+                <div id="priceDisplay" class="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4 hidden">
+                    <span class="text-blue-800 font-bold">قیمت کل: <span id="totalPrice">0</span> تومان</span>
+                </div>
+                
+                <textarea placeholder="توضیحات سفارش (اختیاری)" class="w-full p-3 border rounded-lg mb-4" rows="3"></textarea>
+                
+                <!-- Customer Information Section -->
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                    <h4 class="text-lg font-bold text-blue-800 mb-4 text-center">اطلاعات سفارش دهنده</h4>
+                    
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <input type="text" placeholder="نام" class="p-3 border rounded-lg" required>
+                        <input type="text" placeholder="نام خانوادگی" class="p-3 border rounded-lg" required>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <input type="tel" placeholder="شماره تماس" class="w-full p-3 border rounded-lg" required>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">آدرس دقیق تحویل:</label>
+                        <textarea placeholder="شهر، منطقه، خیابان، کوچه، پلاک، واحد..." class="w-full p-3 border rounded-lg" rows="3" required></textarea>
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-gray-700 mb-2">تاریخ تحویل:</label>
+                        <select id="deliveryDate" class="w-full p-3 border rounded-lg" required>
+                            <option value="">انتخاب تاریخ</option>
+                            <!-- Persian dates will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">زمان تحویل:</label>
+                        <select class="w-full p-3 border rounded-lg" required>
+                            <option value="">انتخاب زمان</option>
+                            <option value="morning">صبح (۹-۱۲)</option>
+                            <option value="afternoon">عصر (۱۴-۱۸)</option>
+                            <option value="evening">شب (۱۸-۲۱)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">روش پرداخت:</label>
+                    <div class="grid grid-cols-2 gap-4">
+                        <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                            <input type="radio" name="paymentMethod" value="cash" class="ml-2" required>
+                            <span class="text-2xl ml-2">💵</span>
+                            <span>پرداخت در محل</span>
+                        </label>
+                        <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                            <input type="radio" name="paymentMethod" value="online" class="ml-2" required>
+                            <span class="text-2xl ml-2">💳</span>
+                            <span>پرداخت آنلاین</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-bold">
+                    ثبت سفارش
+                </button>
+            </form>
+            
+            <button onclick="closeModal('orderModal')" class="absolute top-4 left-4 text-gray-500 hover:text-gray-700 text-2xl">×</button>
+        </div>
+    </div>
+
+    <!-- Order Tracking Modal -->
+    <div id="orderTrackModal" class="modal">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
+            <h3 class="text-2xl font-bold text-purple-800 mb-6 text-center">پیگیری سفارش</h3>
+            
+            <div class="mb-6">
+                <input type="text" id="trackingCode" placeholder="کد پیگیری سفارش" class="w-full p-3 border rounded-lg mb-4">
+                <button onclick="trackOrder()" class="w-full bg-purple-500 hover:bg-purple-600 text-white py-3 rounded-lg font-bold">
+                    پیگیری
+                </button>
+            </div>
+            
+            <div id="orderStatus" class="hidden">
+                <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <h4 class="font-bold text-green-800 mb-2">وضعیت سفارش</h4>
+                    <div class="space-y-2">
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                            <span class="text-sm">سفارش ثبت شد</span>
+                        </div>
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                            <span class="text-sm">در حال آماده سازی</span>
+                        </div>
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                            <span class="text-sm">آماده تحویل</span>
+                        </div>
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <div class="w-3 h-3 bg-gray-300 rounded-full"></div>
+                            <span class="text-sm text-gray-500">تحویل داده شد</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-green-700 mt-4">زمان تحویل تقریبی: فردا ساعت ۱۶:۰۰</p>
+                </div>
+            </div>
+            
+            <button onclick="closeModal('orderTrackModal')" class="absolute top-4 left-4 text-gray-500 hover:text-gray-700 text-2xl">×</button>
+        </div>
+    </div>
+
+    <!-- Admin Modal -->
+    <div id="adminModal" class="modal">
+        <div class="bg-white rounded-2xl p-8 max-w-2xl w-full mx-4 max-h-96 overflow-y-auto">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">پنل مدیریت (نمونه)</h3>
+            
+            <div class="mb-6">
+                <h4 class="font-bold mb-4">افزودن محصول جدید</h4>
+                <form id="addProductForm">
+                    <input type="text" placeholder="نام محصول" class="w-full p-3 border rounded-lg mb-4" required>
+                    <input type="number" placeholder="قیمت (تومان)" class="w-full p-3 border rounded-lg mb-4" required>
+                    <textarea placeholder="توضیحات محصول" class="w-full p-3 border rounded-lg mb-4" rows="3"></textarea>
+                    <input type="file" accept="image/*" class="w-full p-3 border rounded-lg mb-4">
+                    <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg font-bold">
+                        افزودن محصول
+                    </button>
+                </form>
+            </div>
+            
+            <button onclick="closeModal('adminModal')" class="absolute top-4 left-4 text-gray-500 hover:text-gray-700 text-2xl">×</button>
+        </div>
+    </div>
+
+    <!-- Review Modal -->
+    <div id="reviewModal" class="modal">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
+            <h3 class="text-2xl font-bold text-pink-800 mb-6 text-center">ثبت نظر</h3>
+            
+            <form id="reviewForm">
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">امتیاز:</label>
+                    <div class="flex space-x-1 space-x-reverse text-2xl">
+                        <span onclick="setRating(1)" class="cursor-pointer hover:text-yellow-500">⭐</span>
+                        <span onclick="setRating(2)" class="cursor-pointer hover:text-yellow-500">⭐</span>
+                        <span onclick="setRating(3)" class="cursor-pointer hover:text-yellow-500">⭐</span>
+                        <span onclick="setRating(4)" class="cursor-pointer hover:text-yellow-500">⭐</span>
+                        <span onclick="setRating(5)" class="cursor-pointer hover:text-yellow-500">⭐</span>
+                    </div>
+                </div>
+                
+                <textarea placeholder="نظر شما..." class="w-full p-3 border rounded-lg mb-4" rows="4" required></textarea>
+                
+                <button type="submit" class="w-full bg-pink-500 hover:bg-pink-600 text-white py-3 rounded-lg font-bold">
+                    ثبت نظر
+                </button>
+            </form>
+            
+            <button onclick="closeModal('reviewModal')" class="absolute top-4 left-4 text-gray-500 hover:text-gray-700 text-2xl">×</button>
+        </div>
+    </div>
+
+    <!-- Floating Support Bubble -->
+    <div class="fixed bottom-6 left-6 z-50">
+        <div id="supportBubble" class="relative">
+            <!-- Support Options (Hidden by default) -->
+            <div id="supportOptions" class="absolute bottom-16 left-0 bg-white rounded-2xl shadow-2xl p-4 w-64 hidden">
+                <h4 class="text-lg font-bold text-gray-800 mb-4 text-center">پشتیبانی آدرینا</h4>
+                
+                <!-- Phone Support -->
+                <div class="mb-3">
+                    <button onclick="contactSupport('phone')" class="w-full flex items-center p-3 bg-green-50 hover:bg-green-100 rounded-lg transition-colors">
+                        <span class="text-2xl ml-3">📞</span>
+                        <div class="text-right">
+                            <div class="font-medium text-green-800">تماس با پشتیبان</div>
+                            <div class="text-sm text-green-600">۰۹۱۵۴۰۳۲۸۰۸</div>
+                        </div>
+                    </button>
+                </div>
+                
+                <!-- Chat Support -->
+                <div class="mb-3">
+                    <button onclick="contactSupport('chat')" class="w-full flex items-center p-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors">
+                        <span class="text-2xl ml-3">💬</span>
+                        <div class="text-right">
+                            <div class="font-medium text-blue-800">چت با پشتیبان</div>
+                            <div class="text-sm text-blue-600">پاسخگویی آنلاین</div>
+                        </div>
+                    </button>
+                </div>
+                
+                <!-- Master Baker Chat -->
+                <div class="mb-2">
+                    <button onclick="contactSupport('master')" class="w-full flex items-center p-3 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors">
+                        <span class="text-2xl ml-3">👨‍🍳</span>
+                        <div class="text-right">
+                            <div class="font-medium text-purple-800">چت با استاد قناد</div>
+                            <div class="text-sm text-purple-600">مشاوره تخصصی</div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Main Support Button -->
+            <button onclick="toggleSupport()" class="bg-pink-500 hover:bg-pink-600 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all transform hover:scale-110">
+                <span class="text-2xl">💬</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-pink-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <h5 class="text-xl font-bold mb-4">کارگاه شیرینی پزی آدرینا</h5>
+                    <p class="text-pink-200">سامانه سفارش آنلاین کیک و شیرینی</p>
+                    <p class="text-pink-300 text-sm mt-2">📍 بلوار توس، توس ۴۱، ۵ کیلومتر بعد از شهرک حجت، روستای نوری، کوچه نیلوفر</p>
+                    <div class="flex space-x-4 space-x-reverse mt-4">
+                        <span class="sparkle">🧁</span>
+                        <span class="sparkle">🍰</span>
+                        <span class="sparkle">🎂</span>
+                    </div>
+                </div>
+                
+                <div>
+                    <h6 class="font-bold mb-4">لینک های مفید</h6>
+                    <ul class="space-y-2 text-pink-200">
+                        <li><a href="#" class="hover:text-white">درباره ما</a></li>
+                        <li><a href="#" class="hover:text-white">قوانین و مقررات</a></li>
+                        <li><a href="#" class="hover:text-white">حریم خصوصی</a></li>
+                        <li><a href="#" class="hover:text-white">پشتیبانی</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h6 class="font-bold mb-4">دانلود اپلیکیشن</h6>
+                    <button onclick="downloadApp()" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg mb-2 block">
+                        📱 دانلود برای اندروید
+                    </button>
+                    <p class="text-pink-200 text-sm">نسخه ۱.۰.۰</p>
+                </div>
+            </div>
+            
+            <div class="border-t border-pink-700 mt-8 pt-8 text-center">
+                <p class="text-pink-300">© ۱۴۰۳ کارگاه شیرینی پزی آدرینا - تمامی حقوق محفوظ است</p>
+                <p class="text-pink-400 text-sm mt-2">مطابق با قوانین جمهوری اسلامی ایران</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sample data
+        let products = [
+            {id: 1, name: 'کیک تولد فانتزی', price: 200000, description: 'کیک سفارشی با طراحی منحصر به فرد', emoji: '🎂', unit: 'کیلوگرم', reviews: []},
+            {id: 2, name: 'شیرینی تَر', price: 120000, description: 'رولت، سولی، تَر، نان خامه ای', emoji: '🧁', unit: 'کیلوگرم', reviews: []},
+            {id: 3, name: 'شیرینی خشک', price: 150000, description: 'زبون، دانمارکی و انواع شیرینی های خشک', emoji: '🍪', unit: 'کیلوگرم', reviews: []}
+        ];
+
+        let currentUser = null;
+        let currentRating = 0;
+
+        // Product variants
+        const productVariants = {
+            2: ['رولت', 'سولی', 'تَر', 'نان خامه ای'],
+            3: ['زبون', 'دانمارکی', 'نان برنجی', 'باقلوا']
+        };
+
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Auth functions
+        function switchTab(tab) {
+            const loginTab = document.getElementById('loginTab');
+            const registerTab = document.getElementById('registerTab');
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+
+            if (tab === 'login') {
+                loginTab.classList.add('bg-pink-500', 'text-white');
+                loginTab.classList.remove('bg-gray-300', 'text-gray-700');
+                registerTab.classList.add('bg-gray-300', 'text-gray-700');
+                registerTab.classList.remove('bg-pink-500', 'text-white');
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+            } else {
+                registerTab.classList.add('bg-pink-500', 'text-white');
+                registerTab.classList.remove('bg-gray-300', 'text-gray-700');
+                loginTab.classList.add('bg-gray-300', 'text-gray-700');
+                loginTab.classList.remove('bg-pink-500', 'text-white');
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+            }
+        }
+
+        // Load products
+        function loadProducts() {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = products.map(product => `
+                <div class="card-hover magic-card rounded-2xl p-6 shadow-2xl border-2 border-blue-100 relative overflow-hidden">
+                    <div class="absolute top-2 right-2 magic-sparkle text-2xl">✨</div>
+                    <div class="text-center">
+                        <div class="text-6xl mb-4 floating-element">${product.emoji}</div>
+                        <h4 class="text-2xl font-bold text-blue-900 mb-3 drop-shadow-md">${product.name}</h4>
+                        <p class="text-blue-700 mb-4">${product.description}</p>
+                        <div class="bg-gradient-to-r from-blue-100 to-white rounded-lg p-3 mb-4 border border-blue-200">
+                            <span class="text-blue-900 font-bold text-lg">${product.price.toLocaleString()} تومان / ${product.unit}</span>
+                        </div>
+                        <div class="space-y-2">
+                            <button onclick="orderProduct(${product.id})" class="w-full bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white py-3 rounded-lg font-bold transition-all transform hover:scale-105 shadow-lg">
+                                سفارش
+                            </button>
+                            <button onclick="openReviewModal(${product.id})" class="w-full bg-gradient-to-r from-white to-blue-50 hover:from-blue-50 hover:to-blue-100 text-blue-800 py-2 rounded-lg font-medium transition-all border border-blue-200">
+                                ثبت نظر
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Load reviews
+        function loadReviews() {
+            const container = document.getElementById('reviewsContainer');
+            const allReviews = products.flatMap(p => p.reviews);
+            
+            if (allReviews.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-8">
+                        <div class="text-4xl mb-4">💬</div>
+                        <p class="text-gray-600">هنوز نظری ثبت نشده است. اولین نظر را شما بدهید!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = allReviews.map(review => `
+                <div class="bg-white rounded-xl p-6 shadow-lg">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center text-white font-bold">
+                            ${review.user.charAt(0)}
+                        </div>
+                        <div class="mr-3">
+                            <h5 class="font-bold">${review.user}</h5>
+                            <div class="text-yellow-500">${'⭐'.repeat(review.rating)}</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-700">${review.comment}</p>
+                    <p class="text-sm text-gray-500 mt-2">محصول: ${review.productName}</p>
+                </div>
+            `).join('');
+        }
+
+        // Order tracking
+        function trackOrder() {
+            const code = document.getElementById('trackingCode').value;
+            if (code) {
+                document.getElementById('orderStatus').classList.remove('hidden');
+            } else {
+                alert('لطفاً کد پیگیری را وارد کنید');
+            }
+        }
+
+        // Review functions
+        function openReviewModal(productId) {
+            window.currentProductId = productId;
+            openModal('reviewModal');
+        }
+
+        function setRating(rating) {
+            currentRating = rating;
+            const stars = document.querySelectorAll('#reviewModal .cursor-pointer');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.style.color = '#fbbf24';
+                } else {
+                    star.style.color = '#d1d5db';
+                }
+            });
+        }
+
+        // Order product
+        function orderProduct(productId) {
+            // Check if user is logged in
+            if (!currentUser) {
+                alert('برای ثبت سفارش ابتدا باید وارد حساب کاربری خود شوید یا ثبت نام کنید.');
+                openModal('loginModal');
+                return;
+            }
+            
+            openModal('orderModal');
+            // Pre-select the product
+            document.getElementById('productSelect').value = productId;
+            updateProductDetails();
+        }
+
+        // Update product details and variants
+        function updateProductDetails() {
+            const productId = parseInt(document.getElementById('productSelect').value);
+            const variantsDiv = document.getElementById('productVariants');
+            const variantSelect = document.getElementById('variantSelect');
+            const orderTypeSection = document.getElementById('orderTypeSection');
+            
+            if (productVariants[productId]) {
+                variantsDiv.classList.remove('hidden');
+                variantSelect.innerHTML = productVariants[productId].map(variant => 
+                    `<option value="${variant}">${variant}</option>`
+                ).join('');
+                
+                // Show order type selection for pastries
+                orderTypeSection.classList.remove('hidden');
+                // Default to weight for pastries
+                document.querySelector('input[name="orderType"][value="weight"]').checked = true;
+                toggleOrderType();
+            } else {
+                variantsDiv.classList.add('hidden');
+                orderTypeSection.classList.add('hidden');
+                // For cakes, only show weight option
+                document.getElementById('weightSection').classList.remove('hidden');
+                document.getElementById('quantitySection').classList.add('hidden');
+            }
+            
+            calculatePrice();
+        }
+
+        // Toggle between weight and quantity ordering
+        function toggleOrderType() {
+            const orderType = document.querySelector('input[name="orderType"]:checked')?.value;
+            const weightSection = document.getElementById('weightSection');
+            const quantitySection = document.getElementById('quantitySection');
+            
+            if (orderType === 'weight') {
+                weightSection.classList.remove('hidden');
+                quantitySection.classList.add('hidden');
+                document.getElementById('quantityInput').value = '';
+            } else if (orderType === 'quantity') {
+                weightSection.classList.add('hidden');
+                quantitySection.classList.remove('hidden');
+                document.getElementById('weightInput').value = '';
+            }
+            
+            calculatePrice();
+        }
+
+        // Calculate total price
+        function calculatePrice() {
+            const productId = parseInt(document.getElementById('productSelect').value);
+            const weight = parseFloat(document.getElementById('weightInput').value) || 0;
+            const quantity = parseInt(document.getElementById('quantityInput').value) || 0;
+            const priceDisplay = document.getElementById('priceDisplay');
+            const totalPriceSpan = document.getElementById('totalPrice');
+            
+            if (productId) {
+                const product = products.find(p => p.id === productId);
+                let totalPrice = 0;
+                
+                if (weight > 0) {
+                    totalPrice = product.price * weight;
+                } else if (quantity > 0) {
+                    // For quantity-based orders, assume average weight per piece
+                    const avgWeightPerPiece = 0.1; // 100 grams per piece
+                    totalPrice = product.price * quantity * avgWeightPerPiece;
+                }
+                
+                if (totalPrice > 0) {
+                    totalPriceSpan.textContent = totalPrice.toLocaleString();
+                    priceDisplay.classList.remove('hidden');
+                } else {
+                    priceDisplay.classList.add('hidden');
+                }
+            } else {
+                priceDisplay.classList.add('hidden');
+            }
+        }
+
+        // Persian date functions
+        function getPersianDates() {
+            const persianMonths = [
+                'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور',
+                'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'
+            ];
+            
+            const persianDays = [
+                'یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنج‌شنبه', 'جمعه', 'شنبه'
+            ];
+            
+            const dates = [];
+            const today = new Date();
+            
+            for (let i = 1; i <= 7; i++) {
+                const date = new Date(today);
+                date.setDate(today.getDate() + i);
+                
+                // Simple Persian date conversion (approximate)
+                const persianYear = 1403;
+                const persianMonth = Math.floor(Math.random() * 12); // Simplified
+                const persianDay = date.getDate();
+                const dayOfWeek = persianDays[date.getDay()];
+                
+                dates.push({
+                    value: date.toISOString().split('T')[0],
+                    text: `${dayOfWeek} ${persianDay} ${persianMonths[persianMonth]} ${persianYear}`
+                });
+            }
+            
+            return dates;
+        }
+
+        function populatePersianDates() {
+            const dateSelect = document.getElementById('deliveryDate');
+            const dates = getPersianDates();
+            
+            dates.forEach(date => {
+                const option = document.createElement('option');
+                option.value = date.value;
+                option.textContent = date.text;
+                dateSelect.appendChild(option);
+            });
+        }
+
+        // Add event listeners for price calculation
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProducts();
+            loadReviews();
+            populatePersianDates();
+            
+            document.getElementById('weightInput').addEventListener('input', calculatePrice);
+            document.getElementById('quantityInput').addEventListener('input', calculatePrice);
+        });
+
+        // Download app
+        function downloadApp() {
+            alert('اپلیکیشن اندروید در حال توسعه است. به زودی در دسترس قرار خواهد گرفت!\n\nویژگی های اپلیکیشن:\n• سفارش آسان\n• پیگیری لحظه ای\n• اعلان های هوشمند\n• پرداخت امن\n• پشتیبانی ۲۴ ساعته');
+        }
+
+        // Support functions
+        function toggleSupport() {
+            const options = document.getElementById('supportOptions');
+            options.classList.toggle('hidden');
+        }
+
+        function contactSupport(type) {
+            let message = '';
+            switch(type) {
+                case 'phone':
+                    message = 'در حال اتصال به پشتیبان...\n\nشماره تماس: ۰۹۱۵۴۰۳۲۸۰۸\nساعات پاسخگویی: ۸ صبح تا ۱۰ شب';
+                    break;
+                case 'chat':
+                    message = 'چت با پشتیبان فعال شد!\n\nپشتیبان: سلام! چطور می‌تونم کمکتون کنم؟\n\n(این یک نمونه است - برای پیاده‌سازی واقعی نیاز به سیستم چت دارد)';
+                    break;
+                case 'master':
+                    message = 'چت با استاد قناد فعال شد!\n\nاستاد قناد: سلام عزیز! برای مشاوره در مورد کیک و شیرینی در خدمتم.\n\n(این یک نمونه است - برای پیاده‌سازی واقعی نیاز به سیستم چت دارد)';
+                    break;
+            }
+            alert(message);
+            document.getElementById('supportOptions').classList.add('hidden');
+        }
+
+        // Check login for main order button
+        function checkLoginAndOrder() {
+            if (!currentUser) {
+                alert('برای ثبت سفارش ابتدا باید وارد حساب کاربری خود شوید یا ثبت نام کنید.');
+                openModal('loginModal');
+                return;
+            }
+            openModal('orderModal');
+        }
+
+        // Form submissions
+        document.getElementById('authForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Simulate successful login
+            currentUser = {name: 'کاربر نمونه', phone: '09123456789'};
+            alert('ورود موفقیت‌آمیز بود! حالا می‌توانید سفارش دهید.');
+            closeModal('loginModal');
+        });
+
+        document.getElementById('newOrderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const productId = parseInt(document.getElementById('productSelect').value);
+            const weight = parseFloat(document.getElementById('weightInput').value) || 0;
+            const quantity = parseInt(document.getElementById('quantityInput').value) || 0;
+            const variant = document.getElementById('variantSelect').value;
+            const imageFile = document.getElementById('imageUpload').files[0];
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+            const deliveryDate = document.getElementById('deliveryDate');
+            const selectedDateText = deliveryDate.options[deliveryDate.selectedIndex].text;
+            
+            // Get customer information
+            const firstName = e.target.querySelector('input[placeholder="نام"]').value;
+            const lastName = e.target.querySelector('input[placeholder="نام خانوادگی"]').value;
+            const phone = e.target.querySelector('input[placeholder="شماره تماس"]').value;
+            const address = e.target.querySelector('textarea[placeholder*="شهر، منطقه"]').value;
+            
+            const product = products.find(p => p.id === productId);
+            let totalPrice = 0;
+            let orderType = '';
+            
+            if (weight > 0) {
+                totalPrice = product.price * weight;
+                orderType = `وزن: ${weight} کیلوگرم`;
+            } else if (quantity > 0) {
+                const avgWeightPerPiece = 0.1;
+                totalPrice = product.price * quantity * avgWeightPerPiece;
+                orderType = `تعداد: ${quantity} عدد`;
+            }
+            
+            const orderCode = 'ORD' + Math.random().toString(36).substr(2, 9).toUpperCase();
+            
+            let orderDetails = `سفارش شما با موفقیت ثبت شد!\nکد پیگیری: ${orderCode}\n\n`;
+            orderDetails += `🧑‍💼 مشخصات سفارش دهنده:\n`;
+            orderDetails += `نام: ${firstName} ${lastName}\n`;
+            orderDetails += `تلفن: ${phone}\n`;
+            orderDetails += `آدرس: ${address}\n\n`;
+            orderDetails += `📦 جزئیات سفارش:\n`;
+            orderDetails += `محصول: ${product.name}\n`;
+            if (variant) orderDetails += `نوع: ${variant}\n`;
+            orderDetails += `${orderType}\n`;
+            orderDetails += `تاریخ تحویل: ${selectedDateText}\n`;
+            orderDetails += `قیمت کل: ${totalPrice.toLocaleString()} تومان\n`;
+            orderDetails += `روش پرداخت: ${paymentMethod === 'cash' ? 'پرداخت در محل 💵' : 'پرداخت آنلاین 💳'}\n`;
+            if (imageFile) orderDetails += `عکس آپلود شد: ${imageFile.name}\n`;
+            orderDetails += `\nاز بخش "پیگیری سفارش" می توانید وضعیت سفارش را مشاهده کنید.`;
+            
+            alert(orderDetails);
+            closeModal('orderModal');
+        });
+
+        document.getElementById('reviewForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (currentRating === 0) {
+                alert('لطفاً امتیاز خود را انتخاب کنید');
+                return;
+            }
+            
+            const comment = e.target.querySelector('textarea').value;
+            const product = products.find(p => p.id === window.currentProductId);
+            
+            if (product) {
+                product.reviews.push({
+                    user: 'کاربر مهمان',
+                    rating: currentRating,
+                    comment: comment,
+                    productName: product.name
+                });
+                
+                loadReviews();
+                alert('نظر شما با موفقیت ثبت شد!');
+                closeModal('reviewModal');
+                currentRating = 0;
+            }
+        });
+
+        document.getElementById('addProductForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('محصول جدید اضافه شد! (نمونه)\nبرای پیاده سازی واقعی نیاز به سرور و پایگاه داده دارد.');
+            closeModal('adminModal');
+        });
+
+        // Close modals when clicking outside
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        });
+
+        // Close support options when clicking outside
+        document.addEventListener('click', function(e) {
+            const supportBubble = document.getElementById('supportBubble');
+            const supportOptions = document.getElementById('supportOptions');
+            
+            if (!supportBubble.contains(e.target)) {
+                supportOptions.classList.add('hidden');
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'968871faf7d3d38a',t:'MTc1NDA4MzkxNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
